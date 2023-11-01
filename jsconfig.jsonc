@@ -1,0 +1,5 @@
+{
+    "complierOptions": {
+        "types": ["node", "webdriverio/async", "@wdio/cucumber -framework"]
+    }
+}
