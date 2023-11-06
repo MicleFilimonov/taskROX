@@ -8,7 +8,11 @@ export const config = {
     ],
     maxInstances: 10,
     capabilities: [{
-        browserName: 'chrome'
+        maxInstances: 5,
+        browserName: 'chrome',
+        // 'goog:chromeOptions': {
+        //     args: ["--headless"]
+        // }
     }],
     logLevel: 'info',
     bail: 0,
@@ -24,9 +28,8 @@ export const config = {
     },
     cucumberOpts: {
         require: [
-            './test/steps/given.js',
-            './test/steps/when.js',
-            './test/steps/then.js'
-        ]
+            './test/steps/*.js',
+        ],
+        failFast: false
     },
 }

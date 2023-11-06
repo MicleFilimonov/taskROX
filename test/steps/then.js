@@ -1,169 +1,68 @@
 import { Then } from '@wdio/cucumber-framework'
-import { expect, $, browser } from '@wdio/globals'
+import cashForm from '../../pageObject/CashForm.js'
+import promo from '../../pageObject/PromoButton.js'
+import statuses from '../../pageObject/Statuses.js'
+import roxstars from '../../pageObject/roxstars.js'
+import elite from '../../pageObject/eliteStatus.js'
+import birthday from '../../pageObject/birthday.js'
+import morebutton from '../../pageObject/morebutton.js'
+import cashback from '../../pageObject/cashback.js'
+import news from '../../pageObject/news.js'
+import promotions from '../../pageObject/promotions.js'
 
-Then("Проверяю, что статус пользователя New", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const emailConfirm = await $('//*[@id="form-save-profile"]/div[1]/div/div[1]/div[1]/form/p[1]/span[2]')
-    expect(emailConfirm).toExist
-    const emailConfirmValue = await emailConfirm.getText()
-    expect(emailConfirmValue).toEqual('Подтверждена')
+
+Then("Я проверяю статус New", async () => {
+    await statuses.confirmNew()
 })
 
-Then("Проверяю, что почта подтверждена", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const emailConfirm = await $('//*[@id="form-save-profile"]/div[1]/div/div[1]/div[1]/form/p[1]/span[2]')
-    expect(emailConfirm).toExist
-    const emailConfirmValue = await emailConfirm.getText()
-    expect(emailConfirmValue).toEqual('Подтверждена')
+Then("Я проверяю, что почта подтверждена", async () => {
+    await statuses.confirmaEmail()
 })
 
-Then("Отображения поп-апа кассы", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 5000 });
-    
-    const kassaWindow = await $('#my-kassa')
-    expect(kassaWindow).isDisplayed(true);
+Then("Я вижу окно кассы", async () => {
+    await cashForm.cashDisplayed()
 })
 
-Then("Проверяю, что статус ELITE существует и содержит текст ELITE", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 5000 });
-    
-    const statusElite = await $('//*[@id="contentBox"]/div[4]/div/div[7]/div[1]/div/p')
-    const textStatusElite = await statusElite.getText()
-    expect(statusElite).toExist()
-    expect(textStatusElite).toEqual('ELITE')
+Then("Я проверяю статус ELITE", async () => {
+    await elite.checkElite()
 })
 
-Then("Проверяю наличие турнира с названием ROXSTARS", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const tournamentBlock = await $('//*[@id="contentBox"]/div[4]/div/div');
-    const desiredTournament = await tournamentBlock.$('div[data-tournament="roxstars"]');
-    const text = await desiredTournament.getAttribute('data-tournament');
-    expect(text).toContain('roxstars');
+Then("Я проверяю наличие турнира ROXSTARS", async () => {
+    await roxstars.roxstarsTournament()
 })
 
-Then("Проверяю наличие бонуса ко дню рождения", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const birthdayTitle = await $('//*[@id="birthday"]/div/div/div[1]/div')
-    const birthdayText = await (birthdayTitle).getText()
-    const expectedSubtext = "ПОДАРОК НА ДЕНЬ РОЖДЕНИЯ ДО"
-    const conatainerBonus = await $('//*[@id="birthday"]/div/div/div[3]')
-    expect(conatainerBonus).toExist
-    expect(birthdayText).toContain(expectedSubtext)
+Then("Я проверяю наличие подарка на ДР", async () => {
+    await birthday.birthdayText()
 })
 
-Then("Проверяю наличие кнопки Узнать больше и проверяю правильность ссылки", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const MoreButton = await $('//*[@id="contentBox"]/div[4]/div/div[2]/div/div/div[2]/a')
-    const textMoreButton = await MoreButton.getText()
-    const linkMoreButton = await MoreButton.getAttribute('href')
-    expect(MoreButton).toHaveAttr('href')
-    expect(linkMoreButton).toContain('/lottery/rox-chart-eur');
-    expect(textMoreButton).toEqual('УЗНАТЬ БОЛЬШЕ')
+Then("Я проверяю наличие кнопки Узнать больше", async () => {
+    await morebutton.getMoreButton()
 })
 
-Then("Проверяю наличие блока кэшбэка с текстом", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const cashbackTitle = await $('//*[@id="contentBox"]/div[4]/h3')
-    const classCashbackTitle = await cashbackTitle.getText()
-    expect(classCashbackTitle).toEqual('КАК ПОЛУЧИТЬ КЕШБЭК?')
-    const cashbackFullContainer = await $('//*[@id="contentBox"]/div[4]/div[3]')
-    await cashbackFullContainer.isDisplayed(true)
-    const firstTextBlock = await $('//*[@id="contentBox"]/div[4]/div[3]/p[1]')
-    await firstTextBlock.isDisplayed(true)
-    const secondTextBlock = await $('//*[@id="contentBox"]/div[4]/div[3]/p[2]')
-    await secondTextBlock.isDisplayed(true)
+Then("Я проверяю наличие блока Как получить кешбэк?", async () => {
+    await cashback.titleCheck()
+    await cashback.blockCheck()
 })
 
-Then("Проверяю наличие 2-х любых новостей", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const firstNews = await $('//*[@id="contentBox"]/div[4]/div/div/div[1]')
-    expect(firstNews).toExist()
-    const firstNewsTitle = await $('//*[@id="contentBox"]/div[4]/div/div/div[1]/div[1]')
-    const firstNewsText = await firstNewsTitle.getText()
-    const firstNewsClass = await firstNewsTitle.getAttribute('class')
-    expect(firstNewsText).toBeTruthy()
-    expect(firstNewsClass).toBeTruthy()
-    const secondNews = await $('//*[@id="contentBox"]/div[4]/div/div/div[2]')
-    expect(secondNews).toExist()
-    const secondNewsTitle = await $('//*[@id="contentBox"]/div[4]/div/div/div[2]/div[1]')
-    const secondNewsText = await secondNewsTitle.getText();
-    const secondNewsClass = await secondNewsTitle.getAttribute('class');
-    expect(secondNewsText).toBeTruthy()
-    expect(secondNewsClass).toBeTruthy()
+Then("Я проверяю наличие 2-х любых новостей", async () => {
+    await news.firstNewsCheck()
+    await news.secondNewsCheck()
 })
 
-Then("Проверяю наличие 2-х любых активных и 2-х любых завершенных акций", async () => {
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
-    
-    const firstActionName = await $('//*[@id="contentBox"]/div[4]/div/div[1]/div[1]/div[1]')
-    const firstActionText = await (firstActionName).getText()
-    expect(firstActionText).toExist
-    expect(firstActionText).toBeDisplayed
-    const secondActionName = await $('//*[@id="contentBox"]/div[4]/div/div[1]/div[2]/div[1]')
-    const secondActionText = await (secondActionName).getText()
-    expect(secondActionText).toExist
-    expect(secondActionText).toBeDisplayed
-    const firstEndedActionName = await $('//*[@id="contentBox"]/div[4]/div/div[3]/div[1]/div[1]')
-    const firstdActionEndedText = await (firstEndedActionName).getText()
-    expect(firstdActionEndedText).toExist
-    expect(firstdActionEndedText).toBeDisplayed
-    const secondEndedActionName = await $('//*[@id="contentBox"]/div[4]/div/div[3]/div[2]/div[1]')
-    const secondActionEndedText = await (secondEndedActionName).getText()
-    expect(secondActionEndedText).toExist
-    expect(secondActionEndedText).toBeDisplayed
+Then("Я проверяю наличие 2-х любых активных акций", async () => {
+    await promotions.firstNewsCheck()
+    await promotions.secondNewsCheck()
 })
 
-Then("Элемент промо отображается", async () => {
-    const promoButtonDisplay = await $('/html/body/div[10]/div[1]/div[2]/div[2]/div[3]/div/ul/li[6]/a')
-    await promoButtonDisplay.isDisplayed(true)
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
+Then("Я проверяю наличие 2-х любых завершенных акций", async () => {
+    await promotions.firstEndedNewsCheck()
+    await promotions.secondEndedNewsCheck()
 })
 
-Then("Касса отображается", async () => {
-    const mykassaDisplayed = await $('//*[@id="profile"]')
-    await mykassaDisplayed.isDisplayed(true)
-    await browser.waitUntil(async () => {
-        const readyState = await browser.execute(() => document.readyState);
-        return readyState === 'complete';
-    }, { timeout: 8000 });
+Then("Я вижу выпавший дропдаун", async () => {
+    await promo.waitPromoButton()
+})
+
+Then("Я вижу окно кассы", async () => {
+    cashForm.cashDisplayed()
 })
