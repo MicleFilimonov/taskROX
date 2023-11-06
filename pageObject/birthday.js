@@ -4,6 +4,7 @@ class birthday {
     }
 
     async birthdayText() {
+        await this.birthday.scrollIntoView()
         const bdText = await this.birthday.getText()
         await expect(bdText).toContain('ПОДАРОК НА ДЕНЬ РОЖДЕНИЯ ДО')
     }

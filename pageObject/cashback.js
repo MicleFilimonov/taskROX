@@ -8,6 +8,7 @@ class cashback {
 
 
     async titleCheck() {
+        await this.cashbackTitle.scrollIntoView()
         const titleText = await (await this.cashbackTitle).getText()
         await expect(titleText).toEqual('КАК ПОЛУЧИТЬ КЕШБЭК?')
     }
